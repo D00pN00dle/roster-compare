@@ -26,18 +26,17 @@ function parseItems(string) {
 
 // Function to find items from the first list not in the second list
 function findMissingItems(list1, list2) {
-  const set2 = new Set(list2);
   
   // Find items from list1 that are not in list2
-  return list1.filter(item => !set2.has(item));
+  return list1.filter(item => !list2.some(otherItem => otherItem.name === item.name));
 }
 
 // Main function to run the comparison
 export function findMissingMembers(content1, content2) {
-  const firstWords1 = parseItems(content1);
-  const firstWords2 = parseItems(content2);
+  const rosterA = parseItems(content1);
+  const rosterB = parseItems(content2);
 
-  const missingItems = findMissingItems(firstWords1, firstWords2);
+  const missingItems = findMissingItems(rosterA, rosterB);
 
   console.log('Items from first file not found in second file:', missingItems);
 
