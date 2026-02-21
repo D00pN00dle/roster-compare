@@ -1,5 +1,5 @@
 export const sharedState = $state(
     {
-        names: []
+        items: []
     }
 );

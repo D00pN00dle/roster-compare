@@ -5,8 +5,8 @@
     import { findMissingMembers } from '../js/compareRosters.js';
     let oldRosterFile = $state();
     let newRosterFile = $state();
-    let error = $state(null);
-    let isButtonDisabled = $derived(!oldRosterFile || !newRosterFile || error);
+    let error = $state({oldRoster: false, newRoster: false});
+    let isButtonDisabled = $derived(!oldRosterFile || !newRosterFile || error.oldRoster || error.newRoster);
     const readFileContents = async (file) => {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -41,7 +41,7 @@
 
             // Pass contents to your comparison function instead of paths
             const missingMembers = findMissingMembers(oldRosterContent, newRosterContent);
-            sharedState.names = missingMembers;
+            sharedState.items = missingMembers;
         } catch (error) {
             console.error('Error reading files:', error);
             alert('Error reading files');
@@ -50,28 +50,33 @@
     };
 
     const validateInput = (file, target) => {
+        const errObj = error;
         if (target.invalid) return;
         if (file.length === 0) {
             alert('Please select a file.');
-            error = true;
+            errObj[target.id] = true;
+            error = typeof error === 'object' ? {...error, ...errObj} : errObj;
             return;
         }
         if (file[0].type !== 'text/plain') {
             alert('Please select a valid text file.');
-            error = true;
+            errObj[target.id] = true;
+            error = typeof error === 'object' ? {...error, ...errObj} : errObj;
             return;
         }
-        error = false;
+        errObj[target.id] = false;
+        error = typeof error === 'object' ? {...error, ...errObj} : errObj;
+
     };
 </script>
 
 <Container class="px-0 pb-3">
     <div class="d-flex pb-3 align-items-center">
-        <Input type="file" placeholder="Old Roster..." id="oldRoster" bind:files={oldRosterFile} on:change={(event) => validateInput(oldRosterFile, event.target)} invalid={error ? true : false}/>
+        <Input type="file" placeholder="Old Roster..." id="oldRoster" bind:files={oldRosterFile} on:change={(event) => validateInput(oldRosterFile, event.target)} invalid={error['oldRoster'] ? error['oldRoster'] : false}/>
         <i class="bi bi-question-circle ms-2" title="Select the old roster file" style="cursor: pointer;"></i>
     </div>
     <div class="d-flex pb-3 align-items-center">
-        <Input type="file" placeholder="New Roster..." id="newRoster" bind:files={newRosterFile} invalid={error ? true : false}/>
+        <Input type="file" placeholder="New Roster..." id="newRoster" bind:files={newRosterFile} on:change={(event) => validateInput(newRosterFile, event.target)} invalid={error['newRoster'] ? error['newRoster'] : false}/>
         <i class="bi bi-question-circle ms-2" title="Select the new roster file" style="cursor: pointer;"></i>
     </div>
     <Button color="primary m-0 w-100" disabled={error === null ? true : isButtonDisabled} on:click={handleMissingMembers}>Compare Rosters</Button>

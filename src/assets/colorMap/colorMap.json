@@ -1,0 +1,18 @@
+{
+  "warrior": "#8B4513",
+  "rogue": "#2F4F4F",
+  "berserker": "#DC143C",
+  "monk": "#FFD700",
+  "wizard": "#4169E1",
+  "magician": "#9370DB",
+  "necromancer": "#2F1B3C",
+  "enchanter": "#FF69B4",
+  "cleric": "red",
+  "druid": "#228B22",
+  "shaman": "#8B7355",
+  "paladin": "#F0E68C",
+  "shadowknight": "#1C1C1C",
+  "ranger": "#556B2F",
+  "bard": "#FF8C00",
+  "beastlord": "#A0522D"
+}

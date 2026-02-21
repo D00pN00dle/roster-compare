@@ -28,12 +28,13 @@
   >
 </svelte:head>
 
-<Container class="vh-100 d-grid align-items-center" style="max-width: 650px;">
+<Container class="vh-100 d-grid align-items-center p-4" style="max-width: 650px;">
   <Container class="card p-3">
     <FileInputs />
   <div class="card">
-    <List names={sharedState.names} />
+    <List items={sharedState.items} />
   </div>
   </Container>
+  <div class="py-2"></div>
 </Container>
 
