@@ -32,15 +32,17 @@ function findMissingItems(list1, list2) {
 }
 
 // Main function to run the comparison
-export function findMissingMembers(content1, content2) {
+export function findRosterChanges(content1, content2) {
   const rosterA = parseItems(content1);
   const rosterB = parseItems(content2);
 
-  const missingItems = findMissingItems(rosterA, rosterB);
+  const missingItems = findMissingItems(rosterA, rosterB).map(item => ({...item, status: 'missing'})); // Mark missing items with a status
+  const newItems = findMissingItems(rosterB, rosterA).map(item => ({...item, status: 'new'})); // Mark new items with a status
 
   console.log('Items from first file not found in second file:', missingItems);
+  console.log('Items in second file not in first file:', newItems);
 
-  return missingItems;
+  return [...missingItems, ...newItems];
 }
 
 

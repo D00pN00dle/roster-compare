@@ -2,7 +2,7 @@
 <script>
     import { sharedState } from '../js/SharedState.svelte.js';
     import { Button, Container, Input } from '@sveltestrap/sveltestrap';
-    import { findMissingMembers } from '../js/compareRosters.js';
+    import { findRosterChanges } from '../js/compareRosters.js';
     let oldRosterFile = $state();
     let newRosterFile = $state();
     let error = $state({oldRoster: false, newRoster: false});
@@ -23,7 +23,7 @@
         });
     };
 
-    const handleMissingMembers = async () => {
+    const handleRosterChanges = async () => {
 
         if (oldRosterFile.length === 0 || newRosterFile.length === 0) {
             alert('Please select both roster files.');
@@ -40,7 +40,7 @@
             console.log('New Roster Content:', newRosterContent);
 
             // Pass contents to your comparison function instead of paths
-            const missingMembers = findMissingMembers(oldRosterContent, newRosterContent);
+            const missingMembers = findRosterChanges(oldRosterContent, newRosterContent);
             sharedState.items = missingMembers;
         } catch (error) {
             console.error('Error reading files:', error);
@@ -79,5 +79,5 @@
         <Input type="file" placeholder="New Roster..." id="newRoster" bind:files={newRosterFile} on:change={(event) => validateInput(newRosterFile, event.target)} invalid={error['newRoster'] ? error['newRoster'] : false}/>
         <i class="bi bi-question-circle ms-2" title="Select the new roster file" style="cursor: pointer;"></i>
     </div>
-    <Button color="primary m-0 w-100" disabled={error === null ? true : isButtonDisabled} on:click={handleMissingMembers}>Compare Rosters</Button>
+    <Button color="primary m-0 w-100" disabled={error === null ? true : isButtonDisabled} on:click={handleRosterChanges}>Compare Rosters</Button>
 </Container>
